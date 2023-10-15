@@ -18,17 +18,17 @@ def main():
     x_test = np.array(x_test)
 
     pipeline = sklearn.pipeline.Pipeline([
-        ("bow_feature_extractor", CountVectorizer(min_df=10, max_df=0.97, ngram_range=(1,1), stop_words="english", strip_accents="ascii")),
-        ("classifier", sklearn.linear_model.LogisticRegression(C=1.0, max_iter=2000, random_state=101)),
+        ("bow_feature_extractor", CountVectorizer(ngram_range=(1,1), stop_words="english", strip_accents="ascii")),
+        ("classifier", sklearn.linear_model.LogisticRegression(max_iter=2000)),
     ])
 
     distributions = {
         "classifier__C": np.logspace(-5, 5, 20), 
-        "bow_feature_extractor__min_df": range(0, 100, 10), 
+        "bow_feature_extractor__min_df": np.arange(0, 100, 10), 
         "bow_feature_extractor__max_df": np.arange(0.8, 1.0, 0.01),
     }
 
-    clf = sklearn.model_selection.RandomizedSearchCV(pipeline, distributions, n_iter=100, verbose=2)
+    clf = sklearn.model_selection.RandomizedSearchCV(pipeline, distributions, n_iter=100, verbose=3, n_jobs=-1)
 
     clf.fit(x, y)
     yhat = clf.predict_proba(x)
