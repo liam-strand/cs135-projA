@@ -65,8 +65,11 @@ def main():
         f.writelines([f"{str(v)}\n" for v in yhat_test])
 
 def get_all_data_from_dir(dirname: str) -> tuple[list[str], list[str], list[str]]:
-    x_train = load_data_from_file(os.path.join(dirname, "x_train.csv"), "text")
-    y_train = load_data_from_file(os.path.join(dirname, "y_train.csv"), "is_positive_sentiment")
+    # x_train = load_data_from_file(os.path.join(dirname, "x_train.csv"), "text")
+    # y_train = load_data_from_file(os.path.join(dirname, "y_train.csv"), "is_positive_sentiment")
+    # x_test = load_data_from_file(os.path.join(dirname, "x_test.csv"), "text")
+    x_train = load_data_from_file("x_train.csv", "text")
+    y_train = load_data_from_file("y_train.csv", "is_positive_sentiment")
     x_test = load_data_from_file(os.path.join(dirname, "x_test.csv"), "text")
     return remove_punctuation(x_train), y_train, remove_punctuation(x_test)
 
