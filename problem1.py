@@ -26,6 +26,8 @@ def main():
         "classifier__C": np.logspace(-5, 5, 20), 
         "bow_feature_extractor__min_df": np.arange(0, 100, 10), 
         "bow_feature_extractor__max_df": np.arange(0.8, 1.0, 0.01),
+        "bow_feature_extractor__stop_words": ["english", None],
+
     }
 
     clf = sklearn.model_selection.RandomizedSearchCV(pipeline, distributions, n_iter=100, verbose=3, n_jobs=-1)
@@ -40,8 +42,11 @@ def main():
         f.writelines([f"{str(v)}\n" for v in yhat_test])
 
 def get_all_data_from_dir(dirname: str) -> tuple[list[str], list[str], list[str]]:
-    x_train = load_data_from_file(os.path.join(dirname, "x_train.csv"), "text")
-    y_train = load_data_from_file(os.path.join(dirname, "y_train.csv"), "is_positive_sentiment")
+    # x_train = load_data_from_file(os.path.join(dirname, "x_train.csv"), "text")
+    # y_train = load_data_from_file(os.path.join(dirname, "y_train.csv"), "is_positive_sentiment")
+    # x_test = load_data_from_file(os.path.join(dirname, "x_test.csv"), "text")
+    x_train = load_data_from_file("x_train.csv", "text")
+    y_train = load_data_from_file("y_train.csv", "is_positive_sentiment")
     x_test = load_data_from_file(os.path.join(dirname, "x_test.csv"), "text")
     return remove_punctuation(x_train), y_train, remove_punctuation(x_test)
 
