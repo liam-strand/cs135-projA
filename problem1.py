@@ -24,16 +24,23 @@ def main():
 
     distributions = {
         "classifier__C": np.logspace(-5, 5, 20), 
-        "bow_feature_extractor__min_df": np.arange(0, 100, 10), 
-        "bow_feature_extractor__max_df": np.arange(0.8, 1.0, 0.01),
+        "bow_feature_extractor__min_df": np.arange(0, 20, 2), 
+        "bow_feature_extractor__max_df": np.arange(0.9, 1.0, 0.02),
     }
 
-    clf = sklearn.model_selection.RandomizedSearchCV(pipeline, distributions, n_iter=100, verbose=3, n_jobs=-1)
+    def scorer(estimator, x, y):
+        yhat = estimator.predict(x)
+        return sklearn.metrics.roc_auc_score(y, yhat)
+
+    clf = sklearn.model_selection.GridSearchCV(pipeline, distributions, verbose=3, n_jobs=-1, scoring=scorer)
 
     clf.fit(x, y)
-    yhat = clf.predict_proba(x)
-    score = sklearn.metrics.roc_auc_score(y, yhat[:,1])
-    print(f"score = {score}")
+    # yhat = clf.predict_proba(x)
+    # score = sklearn.metrics.roc_auc_score(y, yhat[:,1])
+    # print(f"score = {score}")
+
+    pprint(clf.best_params_)
+    pprint(clf.best_score_)
 
     yhat_test = clf.predict_proba(x_test)[:,1]
     with open("yproba1_test.txt", "w") as f:

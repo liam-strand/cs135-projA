@@ -1,18 +1,22 @@
 import numpy as np
 import pandas as pd
 import os
+import sys
 from pprint import pprint
 import sklearn.pipeline
 import sklearn.linear_model
 import sklearn.metrics
 import sklearn.model_selection
 import sklearn.neural_network
-from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.feature_extraction.text import TfidfVectorizer, CountVectorizer
 from scipy.stats import expon, uniform
 import string
 
 
 def main():
+
+    with open("res.txt", "a") as f:
+        print("============", file=f)
 
     (x_amazon, x_imdb, x_yelp), (y_amazon, y_imdb, y_yelp) = get_split_train_data_from_dir("data_reviews")
     x_test_amazon, x_test_imdb, x_test_yelp = get_split_data_from_file("data_reviews/x_test.csv")
@@ -33,19 +37,23 @@ def main():
 
 def fit_model(x: np.ndarray, y: np.ndarray) -> sklearn.model_selection.GridSearchCV:
     pipeline = sklearn.pipeline.Pipeline([
-        ("bow_feature_extractor", TfidfVectorizer(ngram_range=(1,2), strip_accents="ascii")),
-        ("classifier", sklearn.neural_network.MLPClassifier(solver="lbfgs", max_iter=2000)),
+        ("bow_feature_extractor", CountVectorizer(ngram_range=(1,2), strip_accents="ascii")),
+        ("classifier", sklearn.neural_network.MLPClassifier((100, 50, 25), solver="lbfgs", max_iter=2000)),
     ])
     distributions = {
-        "classifier__alpha": np.logspace(-5, 2, 8), 
-        "classifier__hidden_layer_sizes": [(100), (50, 25), (50, 50), (100, 25), (100, 50), (100, 100)]
-        # "bow_feature_extractor__min_df": range(0, 100, 10), 
-        # "bow_feature_extractor__max_df": np.arange(0.8, 1.0, 0.01),
+        "classifier__alpha": np.logspace(-4, 1, 6),
+        # "classifier__hidden_layer_sizes": [(100, 50, 25)],
+        "bow_feature_extractor__min_df": np.arange(0, 10, 2),
+        "bow_feature_extractor__max_df": np.arange(0.9, 1.0, 0.02),
     }
+
     clf = sklearn.model_selection.GridSearchCV(pipeline, distributions, n_jobs=-1, verbose=3)
     clf.fit(x, y)
-
-    pprint(clf.best_params_)
+    
+    with open("res.txt", "a") as f:
+        print("-=-=-=-=-", file=f)
+        pprint(clf.best_params_, stream=f)
+        pprint(clf.best_score_, stream=f)
 
     return clf
 
