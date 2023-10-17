@@ -1,0 +1,38 @@
+{'classifier__alpha': 0.1, 'classifier__hidden_layer_sizes': (100, 50, 25)}
+0.82875
+============
+{'classifier__alpha': 0.1, 'classifier__hidden_layer_sizes': (100, 50, 25)}
+0.82875
+============
+{'classifier__alpha': 1.0, 'classifier__hidden_layer_sizes': (200, 100, 50, 25)}
+0.825
+============
+============
+{'classifier__alpha': 1.0, 'classifier__hidden_layer_sizes': (200, 100, 50, 25)}
+0.8200000000000001
+{'classifier__alpha': 0.0001,
+ 'classifier__hidden_layer_sizes': (200, 100, 50, 25)}
+0.7537499999999999
+{'classifier__alpha': 1e-05,
+ 'classifier__hidden_layer_sizes': (200, 100, 50, 25)}
+0.8162500000000001
+============
+{'classifier__alpha': 1.0, 'classifier__hidden_layer_sizes': (200, 100, 50, 25)}
+0.825
+============
+{'classifier__alpha': 0.1, 'classifier__hidden_layer_sizes': (200, 100, 50, 25)}
+0.81375
+============
+============
+============
+============
+-=-=-=-=-
+{'bow_feature_extractor__min_df': 0, 'classifier__alpha': 1.0}
+0.83375
+============
+============
+-=-=-=-=-
+{'bow_feature_extractor__max_df': 0.9,
+ 'bow_feature_extractor__min_df': 0,
+ 'classifier__alpha': 1.0}
+0.8262500000000002
